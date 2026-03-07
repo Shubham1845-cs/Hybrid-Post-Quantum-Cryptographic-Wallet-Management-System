@@ -2,7 +2,7 @@ import crypto from "crypto"
 import { ECDSACrypto } from './ECDSACrypto';
 import { DilithiumCrypto } from './DilithiumCrypto';
 import { HybridKeyPair, EncryptedKeys, DecryptedKeys } from '../types/crypto.types';
-
+import { Wallet } from "../models/Wallet";
 export class KeyManager{
     private ecdsa =new ECDSACrypto();
     private dilithium= new DilithiumCrypto();
@@ -65,4 +65,45 @@ export class KeyManager{
       throw new Error('Decryption failed: Wrong password or corrupted data');
     }
     }
+    async storeKeyPair(walletData:any,encryptedKeys:any)
+    {
+        try {
+            const newWallet=await Wallet.create({
+                address:walletData.walletAddress,
+                publicKeys:{
+                    ecdsa:walletData.publicKey.ecdsa,
+                    dilithium:walletData.publicKey.dilithium
+                },
+                encryptedPrivateKeys:{
+                    encryptedClassical:encryptedKeys.encryptedClassical,
+                    encryptedPQC:encryptedKeys.encryptedPQC,
+                    iv:encryptedKeys.iv,
+                    authTag:encryptedKeys.authTag,
+                    salt:encryptedKeys.salt,
+                },
+                balance:0,
+                nonce:0
+            });
+            return walletData;
+        } catch (error) {
+            console.log("dtabase storage is failed:",error);
+            throw error;
+        }
+
+        
+
+    }
+    async retrivekeyPair(address :string)
+    {
+        // We use .lean() to get a plain JS object, which is faster
+        const wallet=await Wallet.findOne({address:address.toLowerCase()}).lean();
+        if(!wallet)
+        {
+            throw new Error("wallet not found in database");
+
+        }
+        return wallet.encryptedPrivateKeys;
+    }
+
+
 }

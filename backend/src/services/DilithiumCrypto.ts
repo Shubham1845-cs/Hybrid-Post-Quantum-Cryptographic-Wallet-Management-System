@@ -1,29 +1,33 @@
-import crypto from 'crypto';
+// Note: You'll need to find a Dilithium library for Node.js
+// This is a template showing the structure
+
 import { KeyPair } from '../types/crypto.types';
 
 export class DilithiumCrypto {
-  
+  // Method 1: Generate Dilithium key pair
   generateKeyPair(): KeyPair {
+    // TODO: Use Dilithium library to generate keys
+    // Example structure (actual implementation depends on library):
+    // const keys = dilithium.generateKeys();
     
-    const { publicKey, privateKey } = crypto.generateKeyPairSync('ml-dsa-65', {
-      publicKeyEncoding: { type: 'spki', format: 'der' },
-      privateKeyEncoding: { type: 'pkcs8', format: 'der' }
-    });
-    
-    return { publicKey, privateKey };
+    return {
+      publicKey: Buffer.from([]), // Replace with actual public key
+      privateKey: Buffer.from([]), // Replace with actual private key
+    };
   }
 
+  // Method 2: Sign data with Dilithium
   sign(data: Buffer, privateKey: Buffer): Buffer {
-    const key = crypto.createPrivateKey({ key: privateKey, format: 'der', type: 'pkcs8' });
-    
-    // Pass 'null' for the algorithm because ML-DSA handles its own internal hashing
-    return crypto.sign(null, data, key);
+    // TODO: Use Dilithium library to sign
+    // const signature = dilithium.sign(data, privateKey);
+    return Buffer.from([]); // Replace with actual signature
   }
 
-  // Method 3: Verify signature
+  // Method 3: Verify Dilithium signature
   verify(data: Buffer, signature: Buffer, publicKey: Buffer): boolean {
-    const key = crypto.createPublicKey({ key: publicKey, format: 'der', type: 'spki' });
-    
-    return crypto.verify(null, data, key, signature);
+    // TODO: Use Dilithium library to verify
+    // return dilithium.verify(data, signature, publicKey);
+    return false; // Replace with actual verification
   }
 }
+export default DilithiumCrypto;

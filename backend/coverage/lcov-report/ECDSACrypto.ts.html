@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -101,7 +101,8 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -115,20 +116,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">200x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">200x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,8 +126,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ec as EC } from 'elliptic';
 import { KeyPair, Signature } from '../types/crypto.types';
@@ -152,39 +154,40 @@ export class ECDSACrypto {
   }
 &nbsp;
   // Method 1: Generate a new key pair
-<span class="fstat-no" title="function not covered" >  generateKeyPair(</span>): KeyPair {
-    const keyPair = <span class="cstat-no" title="statement not covered" >this.ec.genKeyPair();</span>
+  generateKeyPair(): KeyPair {
+    const keyPair = this.ec.genKeyPair();
     
-<span class="cstat-no" title="statement not covered" >    return {</span>
+    return {
       publicKey: Buffer.from(keyPair.getPublic('hex'), 'hex'),
       privateKey: Buffer.from(keyPair.getPrivate('hex'), 'hex'),
     };
   }
 &nbsp;
   // Method 2: Sign data with private key
-<span class="fstat-no" title="function not covered" >  sign(</span>data: Buffer, privateKey: Buffer): Signature {
-    const key = <span class="cstat-no" title="statement not covered" >this.ec.keyFromPrivate(privateKey);</span>
-    const signature = <span class="cstat-no" title="statement not covered" >key.sign(data);</span>
+  sign(data: Buffer, privateKey: Buffer): Signature {
+    const key = this.ec.keyFromPrivate(privateKey);
+    const signature = key.sign(data);
     
-<span class="cstat-no" title="statement not covered" >    return {</span>
+    return {
       r: signature.r.toString('hex'),
       s: signature.s.toString('hex'),
     };
   }
 &nbsp;
   // Method 3: Verify signature with public key
-<span class="fstat-no" title="function not covered" >  verify(</span>data: Buffer, signature: Signature, publicKey: Buffer): boolean {
-    const key = <span class="cstat-no" title="statement not covered" >this.ec.keyFromPublic(publicKey, 'hex');</span>
-<span class="cstat-no" title="statement not covered" >    return key.verify(data, signature);</span>
+  verify(data: Buffer, signature: Signature, publicKey: Buffer): boolean {
+    const key = this.ec.keyFromPublic(publicKey, 'hex');
+    return key.verify(data, signature);
   }
-}</pre></td></tr></table></pre>
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-07T10:39:55.685Z
+                at 2026-03-05T19:28:34.874Z
             </div>
         <script src="prettify.js"></script>
         <script>

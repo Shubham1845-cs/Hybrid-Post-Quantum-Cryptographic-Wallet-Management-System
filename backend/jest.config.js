@@ -19,4 +19,12 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
   verbose: true,
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        rootDir: '.',
+        isolatedModules: true,
+      },
+    },
+  },
 };

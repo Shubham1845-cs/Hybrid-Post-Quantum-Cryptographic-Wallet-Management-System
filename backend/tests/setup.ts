@@ -11,14 +11,14 @@ beforeAll(async () => {
 
   // Connect to in-memory database
   await mongoose.connect(mongoUri);
-});
+}, 30000); // Increase timeout for MongoDB setup
 
 // Cleanup after all tests
 afterAll(async () => {
   // Disconnect and stop MongoDB
   await mongoose.disconnect();
   await mongoServer.stop();
-});
+}, 30000);
 
 // Clear database between tests
 afterEach(async () => {

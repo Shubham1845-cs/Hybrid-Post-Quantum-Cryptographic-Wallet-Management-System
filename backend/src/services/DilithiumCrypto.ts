@@ -27,3 +27,4 @@ export class DilithiumCrypto {
     return crypto.verify(null, data, key, signature);
   }
 }
+export default DilithiumCrypto;

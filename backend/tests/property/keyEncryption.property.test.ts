@@ -26,7 +26,7 @@ describe('Property 3: Private Key Storage Encryption', () => {
           const classicalBuffer = Buffer.from(classicalPriv);
           const pqcBuffer = Buffer.from(pqcPriv);
 
-          const encrypted = keyManager.encrptionPrivateKeys(
+          const encrypted = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password
@@ -65,7 +65,7 @@ describe('Property 3: Private Key Storage Encryption', () => {
           const pqcBuffer = Buffer.from(pqcPriv);
 
           // Encrypt the keys
-          const encrypted = keyManager.encrptionPrivateKeys(
+          const encrypted = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password
@@ -100,7 +100,7 @@ describe('Property 3: Private Key Storage Encryption', () => {
           const pqcBuffer = Buffer.from(pqcPriv);
 
           // Encrypt with correct password
-          const encrypted = keyManager.encrptionPrivateKeys(
+          const encrypted = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             correctPassword
@@ -131,7 +131,7 @@ describe('Property 3: Private Key Storage Encryption', () => {
           const classicalBuffer = Buffer.from(classicalPriv);
           const pqcBuffer = Buffer.from(pqcPriv);
 
-          const encrypted = keyManager.encrptionPrivateKeys(
+          const encrypted = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password
@@ -165,13 +165,13 @@ describe('Property 3: Private Key Storage Encryption', () => {
           const classicalBuffer = Buffer.from(classicalPriv);
           const pqcBuffer = Buffer.from(pqcPriv);
 
-          const encrypted1 = keyManager.encrptionPrivateKeys(
+          const encrypted1 = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password1
           );
 
-          const encrypted2 = keyManager.encrptionPrivateKeys(
+          const encrypted2 = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password2
@@ -198,13 +198,13 @@ describe('Property 3: Private Key Storage Encryption', () => {
           const classicalBuffer = Buffer.from(classicalPriv);
           const pqcBuffer = Buffer.from(pqcPriv);
 
-          const encrypted1 = keyManager.encrptionPrivateKeys(
+          const encrypted1 = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password
           );
 
-          const encrypted2 = keyManager.encrptionPrivateKeys(
+          const encrypted2 = keyManager.encryptPrivateKeys(
             classicalBuffer,
             pqcBuffer,
             password

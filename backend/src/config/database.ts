@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-const mongodb_url=process.env.MONGDB_URI || '';
+const mongodb_url = process.env.MONGODB_URI || '';
 if(!mongodb_url)
 {
   throw new Error('Mongodb_uri is missing from the enviroment variable ');

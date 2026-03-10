@@ -7,7 +7,7 @@ export interface Transactionstruct extends Document{
     amount:number;
     timestamp:Date;
     nonce:number;
-    dualsingnature:{
+    dualSignature:{
         ecdsa:{
             r:string;
             s:string
@@ -54,7 +54,7 @@ const Transactionschema=new Schema<Transactionstruct>({
         type:Number,
         required:true
     },
-    dualsingnature:{
+    dualSignature:{
         ecdsa:{
             r:{
                 type:String,
@@ -80,4 +80,4 @@ const Transactionschema=new Schema<Transactionstruct>({
     versionKey:false
 }
 )
-export const Transaction=model<Transactionstruct>('Transcation',Transactionschema);
+export const Transaction=model<Transactionstruct>('Transaction',Transactionschema);

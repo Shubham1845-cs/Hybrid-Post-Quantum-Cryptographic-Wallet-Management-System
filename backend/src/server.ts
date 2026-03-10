@@ -1,6 +1,10 @@
 import app from './app';
-const port =process.env.Port || 5000;
+import connectDB from './config/database';
 
-app.listen(port,()=>{
-  console.log("server is ready ")
+const port = process.env.PORT || 5000;
+
+connectDB();
+
+app.listen(port, () => {
+  console.log(`server is ready on port ${port}`);
 })

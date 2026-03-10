@@ -15,7 +15,7 @@ export class KeyManager{
     ivLen: 16
     };
     
-    genratedHybridKeyPair():HybridKeyPair{
+    generateHybridKeyPair():HybridKeyPair{
          const classical =this.ecdsa.generateKeyPair();
          const pqc=this.dilithium.generateKeyPair();
 
@@ -28,7 +28,7 @@ export class KeyManager{
             privateKey:{ecdsa:classical.privateKey,dilithium:pqc.privateKey}
          };
     }
-    encrptionPrivateKeys(classicalPriv:Buffer,pqcPriv:Buffer,password:string):EncryptedKeys{
+    encryptPrivateKeys(classicalPriv:Buffer,pqcPriv:Buffer,password:string):EncryptedKeys{
         const salt=crypto.randomBytes(this.CONFIG.saltLen);
         const iv=crypto.randomBytes(this.CONFIG.ivLen);
         const key=crypto.pbkdf2Sync(password,salt,this.CONFIG.iterations,this.CONFIG.keyLen,this.CONFIG.digest);
@@ -93,7 +93,7 @@ export class KeyManager{
         
 
     }
-    async retrivekeyPair(address :string)
+    async retrieveKeyPair(address :string)
     {
         // We use .lean() to get a plain JS object, which is faster
         const wallet=await Wallet.findOne({address:address.toLowerCase()}).lean();

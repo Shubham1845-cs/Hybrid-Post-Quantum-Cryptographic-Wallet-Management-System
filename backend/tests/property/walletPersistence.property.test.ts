@@ -29,10 +29,10 @@ describe('Property 4: Wallet Data Persistence Round-Trip', () => {
           fc.pre(password.trim().length > 0);
 
           // Generate a hybrid key pair
-          const hybridKeyPair = keyManager.genratedHybridKeyPair();
+          const hybridKeyPair = keyManager.generateHybridKeyPair();
 
           // Encrypt the private keys
-          const encryptedKeys = keyManager.encrptionPrivateKeys(
+          const encryptedKeys = keyManager.encryptPrivateKeys(
             hybridKeyPair.privateKey.ecdsa,
             hybridKeyPair.privateKey.dilithium,
             password
@@ -134,10 +134,10 @@ describe('Property 4: Wallet Data Persistence Round-Trip', () => {
           fc.pre(password.trim().length > 0);
 
           // Generate a hybrid key pair
-          const hybridKeyPair = keyManager.genratedHybridKeyPair();
+          const hybridKeyPair = keyManager.generateHybridKeyPair();
 
           // Encrypt the private keys
-          const encryptedKeys = keyManager.encrptionPrivateKeys(
+          const encryptedKeys = keyManager.encryptPrivateKeys(
             hybridKeyPair.privateKey.ecdsa,
             hybridKeyPair.privateKey.dilithium,
             password
@@ -176,8 +176,8 @@ describe('Property 4: Wallet Data Persistence Round-Trip', () => {
 
           // Create multiple wallets
           for (const password of validPasswords) {
-            const hybridKeyPair = keyManager.genratedHybridKeyPair();
-            const encryptedKeys = keyManager.encrptionPrivateKeys(
+            const hybridKeyPair = keyManager.generateHybridKeyPair();
+            const encryptedKeys = keyManager.encryptPrivateKeys(
               hybridKeyPair.privateKey.ecdsa,
               hybridKeyPair.privateKey.dilithium,
               password
@@ -264,8 +264,8 @@ describe('Property 4: Wallet Data Persistence Round-Trip', () => {
           fc.pre(password.trim().length > 0);
 
           // Generate and store wallet with initial balance
-          const hybridKeyPair = keyManager.genratedHybridKeyPair();
-          const encryptedKeys = keyManager.encrptionPrivateKeys(
+          const hybridKeyPair = keyManager.generateHybridKeyPair();
+          const encryptedKeys = keyManager.encryptPrivateKeys(
             hybridKeyPair.privateKey.ecdsa,
             hybridKeyPair.privateKey.dilithium,
             password

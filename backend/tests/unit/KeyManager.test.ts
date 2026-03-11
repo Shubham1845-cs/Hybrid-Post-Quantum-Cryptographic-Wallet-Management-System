@@ -16,7 +16,7 @@ describe('KeyManager Unit Tests', () => {
 
   describe('Hybrid Key Generation', () => {
     it('should generate a valid hybrid key pair with all required fields', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
 
       // Verify structure
       expect(hybridKeyPair).toHaveProperty('walletAddress');
@@ -40,8 +40,8 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should generate unique key pairs on multiple calls', () => {
-      const keyPair1 = keyManager.genratedHybridKeyPair();
-      const keyPair2 = keyManager.genratedHybridKeyPair();
+      const keyPair1 = keyManager.generateHybridKeyPair();
+      const keyPair2 = keyManager.generateHybridKeyPair();
 
       // Wallet addresses should be different
       expect(keyPair1.walletAddress).not.toBe(keyPair2.walletAddress);
@@ -56,7 +56,7 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should generate ECDSA keys with valid length', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
 
       // ECDSA secp256k1 public key should be 65 bytes (uncompressed) or 33 bytes (compressed)
       const ecdsaPubKeyLen = hybridKeyPair.publicKey.ecdsa.length;
@@ -67,7 +67,7 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should generate Dilithium keys with valid length', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
 
       // Dilithium3 (ML-DSA-65) public key should be 1952 bytes
       expect(hybridKeyPair.publicKey.dilithium.length).toBeGreaterThan(1900);
@@ -100,8 +100,8 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should derive different addresses from different public keys', () => {
-      const keyPair1 = keyManager.genratedHybridKeyPair();
-      const keyPair2 = keyManager.genratedHybridKeyPair();
+      const keyPair1 = keyManager.generateHybridKeyPair();
+      const keyPair2 = keyManager.generateHybridKeyPair();
 
       expect(keyPair1.walletAddress).not.toBe(keyPair2.walletAddress);
     });
@@ -125,10 +125,10 @@ describe('KeyManager Unit Tests', () => {
 
   describe('Private Key Encryption', () => {
     it('should encrypt private keys with a password', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const password = 'test-password-123';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         password
@@ -160,15 +160,15 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should produce different encrypted output with different passwords', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
 
-      const encrypted1 = keyManager.encrptionPrivateKeys(
+      const encrypted1 = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         'password1'
       );
 
-      const encrypted2 = keyManager.encrptionPrivateKeys(
+      const encrypted2 = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         'password2'
@@ -180,16 +180,16 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should produce different encrypted output on multiple encryptions with same password', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const password = 'same-password';
 
-      const encrypted1 = keyManager.encrptionPrivateKeys(
+      const encrypted1 = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         password
       );
 
-      const encrypted2 = keyManager.encrptionPrivateKeys(
+      const encrypted2 = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         password
@@ -204,10 +204,10 @@ describe('KeyManager Unit Tests', () => {
 
   describe('Private Key Decryption', () => {
     it('should decrypt private keys with correct password', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const password = 'correct-password';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         password
@@ -221,11 +221,11 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should fail to decrypt with incorrect password', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const correctPassword = 'correct-password';
       const wrongPassword = 'wrong-password';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         correctPassword
@@ -238,10 +238,10 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should fail to decrypt with corrupted encrypted data', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const password = 'test-password';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         password
@@ -257,10 +257,10 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should fail to decrypt with corrupted auth tag', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const password = 'test-password';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         password
@@ -281,7 +281,7 @@ describe('KeyManager Unit Tests', () => {
       const testDilithiumPrivKey = Buffer.alloc(4000, 0xbb); // 4000 bytes
       const password = 'known-password-123';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         testEcdsaPrivKey,
         testDilithiumPrivKey,
         password
@@ -297,10 +297,10 @@ describe('KeyManager Unit Tests', () => {
 
   describe('Error Handling', () => {
     it('should handle empty password gracefully', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
 
       // Empty password should still work (though not recommended)
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         ''
@@ -312,10 +312,10 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should handle very long passwords', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const longPassword = 'a'.repeat(1000);
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         longPassword
@@ -327,10 +327,10 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should handle special characters in password', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const specialPassword = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         specialPassword
@@ -342,10 +342,10 @@ describe('KeyManager Unit Tests', () => {
     });
 
     it('should handle unicode characters in password', () => {
-      const hybridKeyPair = keyManager.genratedHybridKeyPair();
+      const hybridKeyPair = keyManager.generateHybridKeyPair();
       const unicodePassword = '密码🔐🔑';
 
-      const encrypted = keyManager.encrptionPrivateKeys(
+      const encrypted = keyManager.encryptPrivateKeys(
         hybridKeyPair.privateKey.ecdsa,
         hybridKeyPair.privateKey.dilithium,
         unicodePassword

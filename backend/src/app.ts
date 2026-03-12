@@ -2,6 +2,7 @@ import express,{Application}  from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
+import { errorHandler } from './middleware/errorHandler';
 
 const app : Application = express();
 // middleware 
@@ -17,5 +18,6 @@ app.get('/health', (req, res) => {
 app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
-
+app.use(errorHandler);
+app.listen(5000, () => console.log('Server running on port 5000'));
 export default app;

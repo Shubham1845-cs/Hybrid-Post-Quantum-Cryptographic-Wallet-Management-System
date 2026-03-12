@@ -46,10 +46,8 @@ export const createTransaction=async(req:Request,res:Response)=>{
         const decryptedKeys=keyManager.decryptPrivateKeys(senderWallet.encryptedPrivateKeys,password);
         // construct the raw transaction
         const rawTx=txProcessor.constructTransaction(sender,recipient,amount,senderWallet.nonce);
-        // sign in the transaction
-        const signedTx=txProcessor.signTransaction(rawTx,decryptedKeys);
-        // store in the db
-        await Transaction.create(signedTx);
+        // sign and persist the transaction
+        const signedTx=await txProcessor.signAndPersistTransaction(rawTx,decryptedKeys);
         // update the sender nonce
         senderWallet.nonce+=1;
         await senderWallet.save();

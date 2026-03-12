@@ -3,6 +3,8 @@ import { DecryptedKeys } from '../types/crypto.types'
 import { ECDSACrypto } from './ECDSACrypto'
 import {DilithiumCrypto} from './DilithiumCrypto'
 import { SignedTransaction, Transaction } from '../types/transaction.types'   
+import {Transaction as TransactionModel} from '../models/Transaction';
+
 export class TransactionProcessor{
     private ecdsa=new ECDSACrypto();
     private dilithium=new DilithiumCrypto();
@@ -42,43 +44,43 @@ export class TransactionProcessor{
             timestamp:Date.now(),
         };
     }
-    serializeTransaction(tx:Transaction):Buffer{
-        const dataString=`${tx.sender}|${tx.recipient}|${tx.amount}|${tx.nonce}|${tx.timestamp}`;
-        //convert to buffer
-        return Buffer.from(dataString,'utf-8');
-    }
-    deserializeTransaction(bytes:Buffer):Transaction{
-        const dataString=bytes.toString('utf-8');
-        const parts=dataString.split('|');
-        if(parts.length!==5)
-        {
-            throw new Error('Corrupted or invalid transaction data');
+    
+    async signAndPersistTransaction(
+        tx:Transaction,
+        privateKeys:DecryptedKeys,
 
-        }
-        return{
-            sender:parts[0],
-            recipient:parts[1],
-            amount:Number(parts[2]),
-            nonce:Number(parts[3]),
-            timestamp:Number(parts[4]),
+    ):Promise<SignedTransaction>{
+        const dataString = `${tx.sender}|${tx.recipient}|${tx.amount}|${tx.nonce}|${tx.timestamp}`;
+        const txId = crypto.createHash('sha256').update(dataString).digest('hex');
+        const dataToSign = Buffer.from(txId, 'hex');
 
-        };
+        // B. Generate Dual Signatures
+        const ecdsaSignature = this.ecdsa.sign(dataToSign, privateKeys.classicalPrivateKey);
+        const dilithiumSignature = this.dilithium.sign(dataToSign, privateKeys.pqcPrivateKey);
 
-    }
-    signTransaction(tx:Transaction,privateKeys:DecryptedKeys):SignedTransaction{
-         const serializedBytes=this.serializeTransaction(tx);
-         const txId=crypto.createHash('sha256').update(serializedBytes).digest('hex');
-         const dataToSign=Buffer.from(txId,'hex');
-         const ecdsaSignature=this.ecdsa.sign(dataToSign,privateKeys.classicalPrivateKey);
-         const dilithiumSignature=this.dilithium.sign(dataToSign,privateKeys.pqcPrivateKey);
-         return{
+        const signedTx: SignedTransaction = {
             ...tx,
             txId,
-            dualSignature:{
-                ecdsa:ecdsaSignature,
-                dilithium:dilithiumSignature,
+            dualSignature: {
+                ecdsa: ecdsaSignature,
+                dilithium: dilithiumSignature,
             },
-         };
+            status: 'pending' // Initial state
+        };
+
+        // C. Persistence: Save to MongoDB
+        // This satisfies Requirement 8.3 (Transaction Storage)
+        await TransactionModel .create(signedTx);
+        return signedTx;
     }
 
-}
+    /**
+     * Retrieval Method: Find a specific transaction by its Hash
+     */
+    async getTransactionByHash(txId: string) {
+        const tx = await TransactionModel.findOne({ txId }).lean();
+        if (!tx) throw new Error("Transaction not found in ledger.");
+        return tx;
+    }
+    }
+

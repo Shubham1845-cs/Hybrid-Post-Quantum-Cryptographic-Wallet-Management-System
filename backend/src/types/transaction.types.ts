@@ -20,6 +20,7 @@ export interface SignedTransaction extends Transaction
 {
     txId:string;
     dualSignature:DualSignature;
+    status:string;
 }
 export interface VerifaicationResult{
     isValid:boolean;

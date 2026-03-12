@@ -1,7 +1,8 @@
-import { Request,Response } from "express";
+import { NextFunction, Request,Response } from "express";
 import { KeyManager } from "src/services/KeyManager";
 import {Wallet} from  "src/models/Wallet"
 import { create } from "node:domain";
+import { version } from "node:os";
 
 const keyManager=new KeyManager();
 
@@ -71,3 +72,35 @@ export const getWallet=async(req:Request,res:Response)=>
         return res.status(500).json({error:"internal server error"});
     }
 };
+export const exportWallet=async(req:Request,res:Response,next:NextFunction)=>{
+    try {
+        const address=req.params.address;
+        const wallet=await Wallet.findOne({address:address.toLocaleLowerCase()});
+        if(!wallet)
+        {
+            return  res.status(404).json({erro:"Wallet not found"});
+
+        }
+        const exportData={
+            version:"1.0.0",
+            cryptoType:"Hybrid (ECDSA + ML-DSA)",
+            address:wallet.address,
+            publicKeys:{
+                ecdsa:wallet.publicKeys.ecdsa.toString('hex'),
+                dilithium:wallet.publicKeys.dilithium.toString('hex')
+
+            },
+            // The user will need their original password to use this.
+            encryptedVault:{
+                classical:wallet.encryptedPrivateKeys.encryptedClassical.toString('hex'),
+                pqc:wallet.encryptedPrivateKeys.encryptedPQC.toString('hex'),
+                salt:wallet.encryptedPrivateKeys.salt.toString('hex'),
+                iv:wallet.encryptedPrivateKeys.iv.toString('hex'),
+                authTag:wallet.encryptedPrivateKeys.authTag.toString('hex')
+            }
+        };
+        res.status(200).json(exportData);
+    } catch (error) {
+        next(error);
+    }
+}

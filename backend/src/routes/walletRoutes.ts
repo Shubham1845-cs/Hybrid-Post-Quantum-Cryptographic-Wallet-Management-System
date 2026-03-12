@@ -1,9 +1,11 @@
 import {Router} from 'express';
-import { generateWallet, getWallet } from 'src/controllers/walletController';
+import { exportWallet, generateWallet, getWallet } from 'src/controllers/walletController';
 
 const router=Router();
 
 router.post('/generate',generateWallet);
 
 router.get('/:address',getWallet);
+
+router.get('/:address/export',exportWallet);
 export default router;

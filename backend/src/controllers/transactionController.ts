@@ -100,3 +100,26 @@ export const verifyTransaction=async(req:Request,res:Response)=>
     return res.status(500).json({error:"internal server error"});
    }
 }
+
+export const getTransactionHistory=async(req:Request,res:Response)=> {
+    try {
+        const address = req.params.address;
+        if (!address) {
+            return res.status(400).json({error: "Address is required"});
+        }
+        const transactions = await Transaction.find({
+            $or: [
+                { sender: address.toLowerCase() },
+                { recipient: address.toLowerCase() }
+            ]
+        }).sort({ timestamp: -1 }).lean();
+        
+        return res.status(200).json({
+            count: transactions.length,
+            transactions
+        });
+    } catch (error) {
+        console.log("Get transaction history error", error);
+        return res.status(500).json({error: "internal server error"});
+    }
+}

@@ -45,32 +45,51 @@ export class TransactionProcessor{
         };
     }
     
-    async signAndPersistTransaction(
+    serializeTransaction(tx: any): string {
+        return `${tx.sender}|${tx.recipient}|${tx.amount}|${tx.nonce}|${tx.timestamp}`;
+    }
+    
+    signTransaction(
         tx:Transaction,
-        privateKeys:DecryptedKeys,
-
-    ):Promise<SignedTransaction>{
-        const dataString = `${tx.sender}|${tx.recipient}|${tx.amount}|${tx.nonce}|${tx.timestamp}`;
+        privateKeys:DecryptedKeys
+    ):SignedTransaction {
+        const dataString = this.serializeTransaction(tx);
         const txId = crypto.createHash('sha256').update(dataString).digest('hex');
         const dataToSign = Buffer.from(txId, 'hex');
 
-        // B. Generate Dual Signatures
-        const ecdsaSignature = this.ecdsa.sign(dataToSign, privateKeys.classicalPrivateKey);
-        const dilithiumSignature = this.dilithium.sign(dataToSign, privateKeys.pqcPrivateKey);
+        try {
+            const ecdsaSignature = this.ecdsa.sign(dataToSign, privateKeys.classicalPrivateKey);
+            const dilithiumSignature = this.dilithium.sign(dataToSign, privateKeys.pqcPrivateKey);
+            if(!ecdsaSignature || !dilithiumSignature)
+            {
+                throw new Error("Failed to generate dual signatures");
+            }
+            const signedTx: SignedTransaction = {
+                ...tx,
+                txId,
+                dualSignature: {
+                    ecdsa: ecdsaSignature,
+                    dilithium: dilithiumSignature,
+                },
+                status: 'pending' // Initial state
+            };
 
-        const signedTx: SignedTransaction = {
-            ...tx,
-            txId,
-            dualSignature: {
-                ecdsa: ecdsaSignature,
-                dilithium: dilithiumSignature,
-            },
-            status: 'pending' // Initial state
-        };
+            return signedTx;
+        } catch (error:any) {
+            console.error(`[Signature Generation Error]: Failed to sign transaction for ${tx.sender}`, error.message);
+            throw new Error(`Transaction signing failed: ${error.message}`);
+        }
+    }
+
+    async signAndPersistTransaction(
+        tx:Transaction,
+        privateKeys:DecryptedKeys
+    ):Promise<SignedTransaction>{
+        const signedTx = this.signTransaction(tx, privateKeys);
 
         // C. Persistence: Save to MongoDB
         // This satisfies Requirement 8.3 (Transaction Storage)
-        await TransactionModel .create(signedTx);
+        await TransactionModel.create(signedTx);
         return signedTx;
     }
 

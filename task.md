@@ -61,7 +61,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - Implement verification method
     - _Requirements: 1.2, 3.5, 4.3, 9.2, 9.4_
   
-  - [ ]* 3.4 Write property tests for Dilithium operations
+  - [x]* 3.4 Write property tests for Dilithium operations
     - **Property 1 (partial): Dilithium key generation produces valid keys**
     - **Validates: Requirements 1.2**
 
@@ -80,7 +80,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - Combine into Hybrid_Key_Pair structure
     - _Requirements: 1.1, 1.2, 1.3_
   
-  - [ ]* 4.3 Write property test for hybrid key generation
+  - [x]* 4.3 Write property test for hybrid key generation
     - **Property 1: Hybrid Key Generation Produces Valid Keys**
     - **Validates: Requirements 1.1, 1.2, 1.3**
   
@@ -91,7 +91,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - Encode hash as hex string for wallet address
     - _Requirements: 1.4_
   
-  - [ ]* 4.5 Write property test for address derivation
+  - [x]* 4.5 Write property test for address derivation
     - **Property 2: Wallet Address Derivation is Deterministic**
     - **Validates: Requirements 1.4**
   
@@ -199,7 +199,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - **Property 9: Transaction Serialization Round-Trip**
     - **Validates: Requirements 3.7**
   
-  - [ ]* 7.10 Write unit tests for Transaction Processor
+  - [x]* 7.10 Write unit tests for Transaction Processor
     - Test transaction construction with specific values
     - Test validation rejection for invalid inputs
     - Test nonce increment logic
@@ -214,7 +214,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - Reconstruct and hash transaction payload
     - _Requirements: 4.1_
   
-  - [ ]* 8.2 Write property test for signature extraction
+  - [x]* 8.2 Write property test for signature extraction
     - **Property 10: Dual Signature Extraction**
     - **Validates: Requirements 4.1**
   
@@ -255,132 +255,60 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - Test nonce validation
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 9. Checkpoint - Ensure all tests pass
+- [x] 9. Checkpoint - Ensure all tests pass
   - Run all unit and property tests
   - Verify transaction signing and verification functionality
   - Ensure all tests pass, ask the user if questions arise
 
-- [ ] 10. Implement REST API endpoints
-  - [ ] 10.1 Create wallet generation endpoint
-    - Create POST /api/wallet/generate route
-    - Implement controller to call KeyManager.generateHybridKeyPair()
-    - Store wallet in database
-    - Return wallet address and public keys
-    - Add error handling and validation
-    - _Requirements: 7.1, 1.1, 1.2, 1.3, 1.4_
-  
-  - [ ]* 10.2 Write unit test for wallet generation endpoint
-    - Test successful wallet generation
-    - Test error handling
-    - _Requirements: 7.1_
-  
-  - [ ] 10.3 Create wallet retrieval endpoint
-    - Create GET /api/wallet/:address route
-    - Implement controller to retrieve wallet from database
-    - Return wallet address, balance, and public keys
-    - Add error handling for non-existent wallets
-    - _Requirements: 7.2, 2.1, 2.2, 2.3_
-  
-  - [ ]* 10.4 Write unit test for wallet retrieval endpoint
-    - Test successful wallet retrieval
-    - Test 404 for non-existent wallet
-    - _Requirements: 7.2_
-  
-  - [ ] 10.5 Create transaction creation endpoint
-    - Create POST /api/transaction/create route
-    - Implement controller to validate inputs
-    - Call TransactionProcessor.constructTransaction()
-    - Call TransactionProcessor.signTransaction()
-    - Store transaction in database
-    - Return signed transaction and transaction ID
-    - _Requirements: 7.3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
-  
-  - [ ]* 10.6 Write unit test for transaction creation endpoint
-    - Test successful transaction creation
-    - Test validation errors
-    - _Requirements: 7.3_
-  
-  - [ ] 10.7 Create transaction verification endpoint
-    - Create POST /api/transaction/verify route
-    - Implement controller to call SignatureValidator.verifyTransaction()
-    - Return verification result with detailed status
-    - _Requirements: 7.4, 4.1, 4.2, 4.3, 4.4, 4.5_
-  
-  - [ ]* 10.8 Write unit test for transaction verification endpoint
-    - Test verification of valid transaction
-    - Test rejection of invalid transaction
-    - _Requirements: 7.4_
-  
-  - [ ] 10.9 Create transaction history endpoint
-    - Create GET /api/transaction/history/:address route
-    - Implement controller to query transactions by sender or recipient
-    - Return array of transactions with all fields
-    - _Requirements: 7.5, 6.4, 8.5_
-  
-  - [ ]* 10.10 Write property test for transaction history
-    - **Property 14: Transaction History Completeness**
-    - **Validates: Requirements 6.4, 8.5**
-  
-  - [ ] 10.11 Implement API error handling middleware
-    - Create error handling middleware
-    - Return appropriate HTTP status codes
-    - Sanitize error messages
-    - Log errors without exposing sensitive information
-    - _Requirements: 7.6, 10.1, 10.5_
-  
-  - [ ]* 10.12 Write property test for API input validation
-    - **Property 15: API Input Validation**
-    - **Validates: Requirements 7.6, 7.7, 10.1**
-  
-  - [ ]* 10.13 Write integration tests for API workflows
-    - Test complete workflow: generate wallet → create transaction → verify
-    - Test error scenarios across endpoints
-    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
+## Phase 4: Backend API Development
 
-- [ ] 11. Implement wallet export functionality
-  - [ ] 11.1 Create wallet export endpoint
-    - Create GET /api/wallet/:address/export route
-    - Implement controller to retrieve wallet data
-    - Encrypt sensitive data for export
-    - Return secure export format
-    - _Requirements: 2.5_
-  
-  - [ ]* 11.2 Write property test for wallet export security
-    - **Property 5: Wallet Export Security**
-    - **Validates: Requirements 2.5**
+- [x] 10. Implement REST API Endpoints
+   - [x] 10.1 Create wallet generation endpoint (`POST /api/wallet/generate`)
+   - [x]* 10.2 Write unit test for wallet generation endpoint
+   - [x] 10.3 Create wallet retrieval endpoint (`GET /api/wallet/:address`)
+   - [x]* 10.4 Write unit test for wallet retrieval endpoint
+   - [x] 10.5 Create transaction creation endpoint (`POST /api/transaction/create`)
+   - [x]* 10.6 Write unit test for transaction creation endpoint
+   - [x] 10.7 Create transaction verification endpoint (`POST /api/transaction/verify`)
+   - [x]* 10.8 Write unit test for transaction verification endpoint
+   - [x] 10.9 Create transaction history endpoint (`GET /api/transaction/history/:address`)
+   - [x]* 10.10 Write property test for transaction history
+   - [x] 10.11 Implement API error handling middleware
+   - [x]* 10.12 Write property test for API input validation
+   - [x]* 10.13 Write integration tests for API workflows
 
-- [ ] 12. Implement transaction persistence
-  - [ ] 12.1 Add transaction storage to Transaction Processor
-    - Update signTransaction() to persist transaction to database
-    - Implement transaction retrieval methods
-    - _Requirements: 8.3_
-  
-  - [ ]* 12.2 Write property test for transaction persistence
-    - **Property 16: Transaction Persistence Round-Trip**
-    - **Validates: Requirements 8.2, 8.3**
+- [x] 11. Implement Secure Wallet Export
+   - [x] 11.1 Create wallet export endpoint (`GET /api/wallet/:address/export`)
+   - [x]* 11.2 Write property test for wallet export security
 
-- [ ] 13. Implement error handling for signature operations
-  - [ ] 13.1 Add signature generation error handling
+- [x] 12. Integrate Ledger Database
+   - [x] 12.1 Add transaction storage to Transaction Processor
+     - [x] Update `signTransaction()` to persist transaction to database
+     - [x] Implement transaction retrieval methods
+   - [x]* 12.2 Write property test for transaction persistence
+
+- [x] 13. Implement error handling for signature operations
+  - [x] 13.1 Add signature generation error handling
     - Wrap signature operations in try-catch blocks
     - Prevent transaction creation on signature failure
     - Return descriptive error messages
     - _Requirements: 10.3_
   
-  - [ ]* 13.2 Write property test for signature failure handling
+  - [x]* 13.2 Write property test for signature failure handling
     - **Property 17: Signature Generation Failure Handling**
     - **Validates: Requirements 10.3**
   
-  - [ ] 13.3 Add signature verification error handling
+  - [x] 13.3 Add signature verification error handling
     - Implement rejection logic for failed verification
     - Mark transactions as unverified
     - Log failure reasons
     - _Requirements: 10.4_
   
-  - [ ]* 13.4 Write property test for invalid transaction rejection
+  - [x]* 13.4 Write property test for invalid transaction rejection
     - **Property 18: Invalid Transaction Rejection**
     - **Validates: Requirements 10.4**
   
-  - [ ]* 13.5 Write unit tests for error scenarios
+  - [x]* 13.5 Write unit tests for error scenarios
     - Test key generation failure handling
     - Test database error handling
     - _Requirements: 10.2, 10.5_

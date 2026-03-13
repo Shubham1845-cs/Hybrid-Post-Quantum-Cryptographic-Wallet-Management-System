@@ -83,8 +83,19 @@ export class SignatureValidator {
             return { isValid, isEcdsaValid, isDilithiumValid }
 
         } catch (e) {
-            const error = e instanceof Error ? e.message : 'Unknown verification error'
-            return { isValid: false, isEcdsaValid: false, isDilithiumValid: false, error }
+            // 13.3 - Log failure reasons and return descriptive error
+            const errorMessage = e instanceof Error ? e.message : 'Unknown cryptographic validation error';
+            
+            console.error(`[Signature Verification Error]: Validation failed for TxID ${signedTx.txId || 'unknown'}`);
+            console.error(`Reason: ${errorMessage}`);
+            
+            // 13.3 - Implement rejection logic for failed verification
+            return { 
+                isValid: false, 
+                isEcdsaValid: false, 
+                isDilithiumValid: false, 
+                error: `Verification rejected: ${errorMessage}` 
+            };
         }
     }
 

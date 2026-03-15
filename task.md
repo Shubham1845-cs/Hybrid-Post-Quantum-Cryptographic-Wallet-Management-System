@@ -320,7 +320,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
   - Ensure all tests pass, ask the user if questions arise
 
 - [ ] 15. Set up frontend project foundation
-  - [ ] 15.1 Initialize React frontend with TypeScript
+  - [x] 15.1 Initialize React frontend with TypeScript
     - Use Create React App with TypeScript template or Vite
     - Install dependencies: react, react-dom, typescript, axios
     - Configure tsconfig.json for React
@@ -328,7 +328,7 @@ This implementation plan breaks down the development of the Hybrid PQC Wallet Sy
     - Set up routing with react-router-dom
     - _Requirements: 6.1_
   
-  - [ ] 15.2 Set up frontend testing framework
+  - [x] 15.2 Set up frontend testing framework
     - Install Jest, @testing-library/react, @testing-library/jest-dom
     - Configure jest.config.js
     - Set up test scripts in package.json

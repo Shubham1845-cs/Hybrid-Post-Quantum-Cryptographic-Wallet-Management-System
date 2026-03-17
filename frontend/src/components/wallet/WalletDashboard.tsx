@@ -1,5 +1,5 @@
 import { useAppContext } from '../../context/AppContext';
-import LoadingSpinner from '../common/LoadingSpinner';
+import WalletCardSkeleton from '../common/WalletCardSkeleton';
 import ErrorMessage from '../common/ErrorMessage';
 import WalletCard from './WalletCard';
 import PublicKeysDisplay from './PublicKeysDisplay';
@@ -7,11 +7,18 @@ import PublicKeysDisplay from './PublicKeysDisplay';
 const WalletDashboard = () => {
   const { state, dispatch } = useAppContext();
 
-  // ── Loading ────────────────────────────────────────────────────────────────
+  // ── Loading — show skeleton instead of spinner ─────────────
   if (state.loading) {
     return (
-      <div className="min-h-screen bg-[#080612] flex items-center justify-center">
-        <LoadingSpinner message="Fetching wallet data..." />
+      <div className="min-h-screen bg-[#080612]
+                      flex flex-col items-center gap-6 px-4 py-8">
+        <div className="w-full max-w-md">
+          <p className="text-[10px] font-mono text-violet-400/60
+                        uppercase tracking-[0.3em] mb-1">Dashboard</p>
+          <div className="h-8 w-48 rounded-lg
+                          bg-slate-800 animate-pulse" />
+        </div>
+        <WalletCardSkeleton />
       </div>
     );
   }
@@ -19,7 +26,8 @@ const WalletDashboard = () => {
   // ── Error ──────────────────────────────────────────────────────────────────
   if (state.error) {
     return (
-      <div className="min-h-screen bg-[#080612] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#080612]
+                      flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           <ErrorMessage
             message={state.error}
@@ -30,12 +38,11 @@ const WalletDashboard = () => {
     );
   }
 
-  // ── Empty State ────────────────────────────────────────────────────────────
+  // ── Empty ──────────────────────────────────────────────────
   if (!state.wallet) {
     return (
-      <div className="min-h-screen bg-[#080612] flex flex-col
-                      items-center justify-center gap-4">
-        {/* pulsing lock icon */}
+      <div className="min-h-screen bg-[#080612]
+                      flex flex-col items-center justify-center gap-4">
         <div className="w-16 h-16 rounded-full
                         bg-violet-500/10 border border-violet-500/20
                         flex items-center justify-center
@@ -47,57 +54,51 @@ const WalletDashboard = () => {
           No wallet loaded
         </p>
         <p className="text-sm font-mono text-slate-500 text-center max-w-xs">
-          Generate a new wallet or load an existing one to get started
+          Generate a new wallet or load an existing one
         </p>
       </div>
     );
   }
 
-  // ── Full Dashboard ─────────────────────────────────────────────────────────
+  // ── Full dashboard ─────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#080612] px-4 py-8
                     flex flex-col items-center gap-6">
 
-      {/* star-field dots background */}
+      {/* star dots */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         {[...Array(24)].map((_, i) => (
-          <div key={i}
+          <div
+            key={i}
             className="absolute rounded-full bg-white"
             style={{
-              width:  Math.random() * 2 + 1 + 'px',
+              width: Math.random() * 2 + 1 + 'px',
               height: Math.random() * 2 + 1 + 'px',
-              top:    Math.random() * 100 + '%',
-              left:   Math.random() * 100 + '%',
+              top: Math.random() * 100 + '%',
+              left: Math.random() * 100 + '%',
               opacity: Math.random() * 0.4 + 0.1,
             }}
           />
         ))}
       </div>
 
-      {/* ── Page title ──────────────────────────────── */}
       <div className="w-full max-w-md">
         <p className="text-[10px] font-mono text-violet-400/60
-                      uppercase tracking-[0.3em] mb-1">
-          Dashboard
-        </p>
+                      uppercase tracking-[0.3em] mb-1">Dashboard</p>
         <h1 className="text-2xl font-mono font-bold text-white
                        drop-shadow-[0_0_20px_rgba(167,139,250,0.4)]">
           Wallet Overview
         </h1>
       </div>
 
-      {/* ── Wallet card ─────────────────────────────── */}
       <WalletCard
         address={state.wallet.address}
         balance={state.wallet.balance}
       />
-
-      {/* ── Public keys ─────────────────────────────── */}
       <PublicKeysDisplay
         classicalKey={state.wallet.publicKeys.classical}
         pqcKey={state.wallet.publicKeys.pqc}
       />
-
     </div>
   );
 };

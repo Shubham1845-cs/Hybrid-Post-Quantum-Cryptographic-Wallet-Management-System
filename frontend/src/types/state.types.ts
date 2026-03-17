@@ -6,6 +6,7 @@ export interface AppState{
     wallet:WalletResponce | null;
     transactions:TransactionResponce[];
     loading:boolean;
+    loadingContext:  string | null;
     error:string | null;
 }
 
@@ -16,7 +17,7 @@ export type Action=
  |{type:'ClEAR_WALLET'}
  |{type:'SET_TRANSACTIONS'; payload:TransactionResponce[]}
  |{type:'ADD_TRANSACTION'; payload:TransactionResponce}
- |{type:'SET_LOADING'; payload:boolean}
+ | { type: 'SET_LOADING';      payload: { loading: boolean; context?: string } } 
  |{type:'SET_ERROR'; payload:string | null}
 
  export interface AppContextType

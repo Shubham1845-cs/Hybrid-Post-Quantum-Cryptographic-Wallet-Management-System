@@ -1,14 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { AppProvider } from './context/AppContext.tsx'
+import React          from 'react';
+import ReactDOM       from 'react-dom/client';
+import App            from './App';
+import { AppProvider} from './context/AppContext';
+import ErrorBoundary  from './components/common/ErrorBoundary';
+import './index.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppProvider>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+
+    {/* ErrorBoundary — outermost — catches any crash */}
+    <ErrorBoundary>
+
+      {/* AppProvider — gives context to entire app */}
+      <AppProvider>
         <App />
-    </AppProvider>
-    
-  </StrictMode>,
-)
+      </AppProvider>
+
+    </ErrorBoundary>
+
+  </React.StrictMode>
+);

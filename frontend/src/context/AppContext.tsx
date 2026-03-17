@@ -6,6 +6,7 @@ const initialState:AppState={
     wallet:null,
     transactions:[],
     loading:false,
+    loadingContext:null,
     error:null,
 }
 
@@ -43,13 +44,17 @@ const appReducer=(state:AppState,action:Action):AppState =>
         case 'SET_LOADING':
             return{
                 ...state,
-                loading:action.payload,
+                loading:action.payload.loading,
+                loadingContext: action.payload.loading
+          ? (action.payload.context ?? null)
+          : null,
             };
         case 'SET_ERROR':
             return {
                 ...state,
                 error:action.payload,
                 loading:false,
+                loadingContext:null,
             };
         default:
             return state;

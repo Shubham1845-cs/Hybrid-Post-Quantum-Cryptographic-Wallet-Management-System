@@ -4,57 +4,35 @@
 @tailwind utilities;
 
 /* ---------------------------------------------------------------------------
-   Google Fonts – Inter (body/UI) + JetBrains Mono (code) + Plus Jakarta Sans
-   (display headings). Loaded via @import so no extra <link> is needed.
+   Google Fonts – DM Sans (body/UI) + JetBrains Mono (code/keys).
    --------------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ---------------------------------------------------------------------------
    CSS Custom Properties – design tokens available throughout the app.
    These mirror the values in src/styles/theme.ts.
    --------------------------------------------------------------------------- */
 :root {
-  /* Primary – indigo */
-  --color-primary-50: #eef2ff;
-  --color-primary-100: #e0e7ff;
-  --color-primary-200: #c7d2fe;
-  --color-primary-300: #a5b4fc;
-  --color-primary-400: #818cf8;
-  --color-primary-500: #6366f1;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --color-primary-800: #3730a3;
-  --color-primary-900: #312e81;
-  --color-primary-950: #1e1b4b;
+  /* App backgrounds */
+  --color-app-bg:      #080612;
+  --color-app-surface: #0f0c1a;
+  --color-app-card:    #13102a;
 
-  /* Accent – cyan/teal */
-  --color-accent-50: #ecfeff;
-  --color-accent-100: #cffafe;
-  --color-accent-200: #a5f3fc;
-  --color-accent-300: #67e8f9;
-  --color-accent-400: #22d3ee;
-  --color-accent-500: #06b6d4;
-  --color-accent-600: #0891b2;
-  --color-accent-700: #0e7490;
-  --color-accent-800: #155e75;
-  --color-accent-900: #164e63;
-  --color-accent-950: #083344;
+  /* Brand – violet */
+  --color-brand:       #7c3aed;
+  --color-brand-light: #a78bfa;
+  --color-brand-dim:   #4c1d95;
+  --color-brand-glow:  rgba(124, 58, 237, 0.4);
 
-  /* Semantic */
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #f43f5e;
-
-  /* Surfaces */
-  --color-surface: #f1f5f9;
-  --color-surface-light: #f8fafc;
-  --color-surface-dark: #0f172a;
-  --color-surface-card: #ffffff;
+  /* Accent colors */
+  --color-accent-indigo:  #6366f1;
+  --color-accent-emerald: #10b981;
+  --color-accent-red:     #ef4444;
+  --color-accent-yellow:  #f59e0b;
 
   /* Typography */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
-  --font-display: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, sans-serif;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -80,7 +58,7 @@
   }
 
   body {
-    @apply bg-surface text-slate-800 antialiased;
+    @apply bg-app-bg text-white/90 antialiased;
     font-family: var(--font-sans);
     min-height: 100vh;
   }
@@ -91,8 +69,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-display);
-    @apply font-bold tracking-tight text-slate-900;
+    @apply font-bold text-white;
   }
 
   code,
@@ -104,16 +81,15 @@
 
   /* Focus-visible outline for keyboard navigation */
   :focus-visible {
-    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-app-bg;
   }
 
-  /* Remove default button/input resets */
   button {
     cursor: pointer;
   }
 
   a {
-    @apply text-primary-600 hover:text-primary-700;
+    @apply text-brand-light hover:text-brand;
     text-decoration: none;
   }
 }
@@ -124,40 +100,36 @@
 @layer components {
   /* Card */
   .card {
-    @apply rounded-2xl bg-white p-6 shadow-card transition-shadow duration-200;
+    @apply rounded-card bg-app-card p-6 shadow-card border border-white/5 transition-shadow duration-200;
   }
 
   .card:hover {
-    box-shadow: var(--tw-shadow, 0 4px 6px -1px rgb(0 0 0 / 0.1));
-  }
-
-  .card-dark {
-    @apply rounded-2xl bg-slate-800 p-6 shadow-card transition-shadow duration-200;
+    @apply shadow-card-hover;
   }
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-app-bg disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500 active:bg-primary-800;
+    @apply btn bg-brand text-white hover:bg-brand-dim shadow-glow-violet active:opacity-90;
   }
 
   .btn-accent {
-    @apply btn bg-accent-500 text-white hover:bg-accent-600 focus-visible:ring-accent-400 active:bg-accent-700;
+    @apply btn bg-accent-indigo text-white hover:opacity-90 shadow-glow-indigo;
   }
 
   .btn-outline {
-    @apply btn border border-primary-600 text-primary-600 hover:bg-primary-50 focus-visible:ring-primary-500 active:bg-primary-100;
+    @apply btn border border-brand text-brand-light hover:bg-brand/10 active:bg-brand/20;
   }
 
   .btn-ghost {
-    @apply btn text-slate-600 hover:bg-slate-100 focus-visible:ring-slate-400 active:bg-slate-200;
+    @apply btn text-white/70 hover:bg-white/5 active:bg-white/10;
   }
 
   .btn-danger {
-    @apply btn bg-error-600 text-white hover:bg-error-700 focus-visible:ring-error-500 active:bg-error-800;
+    @apply btn bg-accent-red text-white hover:opacity-90 shadow-glow-red;
   }
 
   .btn-sm {
@@ -170,23 +142,23 @@
 
   /* Form controls */
   .input {
-    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 transition-colors duration-150 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-0 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500;
+    @apply block w-full rounded-lg border border-white/10 bg-app-surface px-3 py-2 text-sm text-white/90 placeholder-white/30 transition-colors duration-150 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .input-error {
-    @apply border-error-400 focus:border-error-500 focus:ring-error-500;
+    @apply border-accent-red focus:border-accent-red focus:ring-accent-red;
   }
 
   .label {
-    @apply mb-1 block text-sm font-medium text-slate-700;
+    @apply mb-1 block text-sm font-medium text-white/70;
   }
 
   .helper-text {
-    @apply mt-1 text-xs text-slate-500;
+    @apply mt-1 text-xs text-white/40;
   }
 
   .error-text {
-    @apply mt-1 text-xs text-error-600;
+    @apply mt-1 text-xs text-accent-red;
   }
 
   /* Badge */
@@ -195,49 +167,48 @@
   }
 
   .badge-primary {
-    @apply badge bg-primary-100 text-primary-800;
+    @apply badge bg-brand/20 text-brand-light;
   }
 
   .badge-accent {
-    @apply badge bg-accent-100 text-accent-800;
+    @apply badge bg-accent-indigo/20 text-accent-indigo;
   }
 
   .badge-success {
-    @apply badge bg-success-100 text-success-800;
+    @apply badge bg-accent-emerald/20 text-accent-emerald;
   }
 
   .badge-warning {
-    @apply badge bg-warning-100 text-warning-800;
+    @apply badge bg-accent-yellow/20 text-accent-yellow;
   }
 
   .badge-error {
-    @apply badge bg-error-100 text-error-800;
+    @apply badge bg-accent-red/20 text-accent-red;
   }
 
   /* Crypto key / address display */
   .key-display {
     font-family: var(--font-mono);
-    @apply break-all rounded-lg bg-slate-100 px-3 py-2 text-xs text-slate-700;
+    @apply break-all rounded-lg border border-white/10 bg-app-surface px-3 py-2 text-xs text-brand-light;
   }
 
   /* Section heading */
   .section-title {
-    @apply text-2xl font-bold text-slate-900;
-    font-family: var(--font-display);
+    @apply text-2xl font-bold text-white;
   }
 
   .section-subtitle {
-    @apply mt-1 text-sm text-slate-500;
+    @apply mt-1 text-sm text-white/50;
   }
 
   /* Divider */
   .divider {
-    @apply my-4 border-t border-slate-200;
+    @apply my-4 border-t border-white/10;
   }
 
   /* Loading spinner */
   .spinner {
-    @apply h-5 w-5 animate-spin rounded-full border-2 border-slate-300 border-t-primary-600;
+    @apply h-5 w-5 animate-spinRing rounded-full border-2 border-white/10 border-t-brand;
   }
 }
 
@@ -251,7 +222,7 @@
 
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgb(148 163 184) transparent;
+    scrollbar-color: rgba(124, 58, 237, 0.4) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -260,16 +231,16 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgb(148 163 184);
+    background-color: rgba(124, 58, 237, 0.4);
     border-radius: 9999px;
   }
 
-  .gradient-primary {
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-500));
+  .gradient-brand {
+    background: linear-gradient(135deg, var(--color-brand), var(--color-accent-indigo));
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-500));
+    background: linear-gradient(135deg, var(--color-brand-light), var(--color-accent-indigo));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

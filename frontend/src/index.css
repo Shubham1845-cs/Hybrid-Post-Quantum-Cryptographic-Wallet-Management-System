@@ -1,0 +1,248 @@
+/* Tailwind CSS directives – processed by PostCSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Google Fonts – DM Sans (body/UI) + JetBrains Mono (code/keys).
+   --------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ---------------------------------------------------------------------------
+   CSS Custom Properties – design tokens available throughout the app.
+   These mirror the values in src/styles/theme.ts.
+   --------------------------------------------------------------------------- */
+:root {
+  /* App backgrounds */
+  --color-app-bg:      #080612;
+  --color-app-surface: #0f0c1a;
+  --color-app-card:    #13102a;
+
+  /* Brand – violet */
+  --color-brand:       #7c3aed;
+  --color-brand-light: #a78bfa;
+  --color-brand-dim:   #4c1d95;
+  --color-brand-glow:  rgba(124, 58, 237, 0.4);
+
+  /* Accent colors */
+  --color-accent-indigo:  #6366f1;
+  --color-accent-emerald: #10b981;
+  --color-accent-red:     #ef4444;
+  --color-accent-yellow:  #f59e0b;
+
+  /* Typography */
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+}
+
+/* ---------------------------------------------------------------------------
+   Base layer overrides
+   --------------------------------------------------------------------------- */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-app-bg text-white/90 antialiased;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold text-white;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  /* Focus-visible outline for keyboard navigation */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-app-bg;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  a {
+    @apply text-brand-light hover:text-brand;
+    text-decoration: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Component layer – reusable utility classes
+   --------------------------------------------------------------------------- */
+@layer components {
+  /* Card */
+  .card {
+    @apply rounded-card bg-app-card p-6 shadow-card border border-white/5 transition-shadow duration-200;
+  }
+
+  .card:hover {
+    @apply shadow-card-hover;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-app-bg disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-dim shadow-glow-violet active:opacity-90;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent-indigo text-white hover:opacity-90 shadow-glow-indigo;
+  }
+
+  .btn-outline {
+    @apply btn border border-brand text-brand-light hover:bg-brand/10 active:bg-brand/20;
+  }
+
+  .btn-ghost {
+    @apply btn text-white/70 hover:bg-white/5 active:bg-white/10;
+  }
+
+  .btn-danger {
+    @apply btn bg-accent-red text-white hover:opacity-90 shadow-glow-red;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* Form controls */
+  .input {
+    @apply block w-full rounded-lg border border-white/10 bg-app-surface px-3 py-2 text-sm text-white/90 placeholder-white/30 transition-colors duration-150 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .input-error {
+    @apply border-accent-red focus:border-accent-red focus:ring-accent-red;
+  }
+
+  .label {
+    @apply mb-1 block text-sm font-medium text-white/70;
+  }
+
+  .helper-text {
+    @apply mt-1 text-xs text-white/40;
+  }
+
+  .error-text {
+    @apply mt-1 text-xs text-accent-red;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply badge bg-brand/20 text-brand-light;
+  }
+
+  .badge-accent {
+    @apply badge bg-accent-indigo/20 text-accent-indigo;
+  }
+
+  .badge-success {
+    @apply badge bg-accent-emerald/20 text-accent-emerald;
+  }
+
+  .badge-warning {
+    @apply badge bg-accent-yellow/20 text-accent-yellow;
+  }
+
+  .badge-error {
+    @apply badge bg-accent-red/20 text-accent-red;
+  }
+
+  /* Crypto key / address display */
+  .key-display {
+    font-family: var(--font-mono);
+    @apply break-all rounded-lg border border-white/10 bg-app-surface px-3 py-2 text-xs text-brand-light;
+  }
+
+  /* Section heading */
+  .section-title {
+    @apply text-2xl font-bold text-white;
+  }
+
+  .section-subtitle {
+    @apply mt-1 text-sm text-white/50;
+  }
+
+  /* Divider */
+  .divider {
+    @apply my-4 border-t border-white/10;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply h-5 w-5 animate-spinRing rounded-full border-2 border-white/10 border-t-brand;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities layer – one-off helpers
+   --------------------------------------------------------------------------- */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 58, 237, 0.4) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgba(124, 58, 237, 0.4);
+    border-radius: 9999px;
+  }
+
+  .gradient-brand {
+    background: linear-gradient(135deg, var(--color-brand), var(--color-accent-indigo));
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-brand-light), var(--color-accent-indigo));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

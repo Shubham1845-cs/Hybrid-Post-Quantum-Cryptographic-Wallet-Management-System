@@ -1,6 +1,6 @@
 import { NextFunction, Request,Response } from "express";
-import { KeyManager } from "src/services/KeyManager";
-import {Wallet} from  "src/models/Wallet"
+import { KeyManager } from "../services/KeyManager";
+import {Wallet} from  "../models/Wallet"
 import { create } from "node:domain";
 import { version } from "node:os";
 
@@ -31,6 +31,17 @@ export const generateWallet=async(req:Request,res:Response)=>{
             balance:100,  //new wallet with the some test balance
             nonce:0
 
+        });
+
+        // Return success response with wallet data
+        return res.status(201).json({
+            message: "Wallet created successfully",
+            address: newWallet.address,
+            balance: newWallet.balance,
+            publicKeys: {
+                ecdsa: walletData.publicKey.ecdsa,
+                dilithium: walletData.publicKey.dilithium
+            }
         });
     } catch (error:any) {
           console.log("Wallet genration error",error);

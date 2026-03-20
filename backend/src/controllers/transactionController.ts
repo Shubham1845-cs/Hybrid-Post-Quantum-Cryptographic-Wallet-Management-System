@@ -1,34 +1,14 @@
 import {Request,Response} from 'express';
-import { Wallet } from 'src/models/Wallet';
-import { Transaction } from 'src/models/Transaction';
-import { TransactionProcessor } from 'src/services/TransactionProcessor';
-import { KeyManager } from 'src/services/KeyManager';
-import { SignatureValidator } from 'src/services/SignatureValidator';
+import { Wallet } from '../models/Wallet';
+import { Transaction } from '../models/Transaction';
+import { TransactionProcessor } from '../services/TransactionProcessor';
+import { KeyManager } from '../services/KeyManager';
+import { SignatureValidator } from '../services/SignatureValidator';
+import { SignedTransaction } from '../types/transaction.types';
+
 const keyManager=new KeyManager();
-
 const txProcessor=new TransactionProcessor();
-
-type SignatureValidationResult = {
-    isValid: boolean;
-    error?: string;
-    [key: string]: unknown;
-};
-
 const validator=new SignatureValidator();
-
-const validateTxSignature = async (tx: unknown): Promise<SignatureValidationResult> => {
-    const v = validator as unknown as {
-        validateSignature?: (payload: unknown) => Promise<SignatureValidationResult>;
-        validate?: (payload: unknown) => Promise<SignatureValidationResult>;
-        verify?: (payload: unknown) => Promise<SignatureValidationResult>;
-    };
-
-    if (typeof v.validateSignature === 'function') return v.validateSignature(tx);
-    if (typeof v.validate === 'function') return v.validate(tx);
-    if (typeof v.verify === 'function') return v.verify(tx);
-
-    throw new Error('SignatureValidator method not found');
-};
 
 export const createTransaction=async(req:Request,res:Response)=>{
     try {
@@ -67,31 +47,44 @@ export const createTransaction=async(req:Request,res:Response)=>{
 export const verifyTransaction=async(req:Request,res:Response)=>
 {
    try {
-    const txId=req.params.txId;
+    const txId=req.body.txId;
+    if(!txId) {
+        return res.status(400).json({error:"Transaction ID is required"});
+    }
     //fetch the transaction from the db using the tx
-    const tx=await Transaction.findOne({txId}).lean();
+    // Note: do NOT use .lean() - SignatureValidator needs proper Buffer types
+    const tx=await Transaction.findOne({txId});
     if(!tx)
     {
         return res.status(404).json({error:"Transaction not found"});
     }
     // call hybrid validator
-    const result = await validateTxSignature(tx);
+    const result = await validator.verifyTransaction(tx as unknown as SignedTransaction);
     //return verfied details
     if(result.isValid){
          return res.status(200).json({
+            valid: true,
             message:"Transaction is valid",
-            txId:(tx as any).txId,
+            txId: tx.txId,
             status:"Verified",
-            details:result
+            signatures: {
+                ecdsa: result.isEcdsaValid,
+                dilithium: result.isDilithiumValid
+            },
+            transaction: tx
          });
     }
     else{
     return res.status(400).json({
+        valid: false,
         message:"Transaction is invalid",
-        txId:(tx as any).txId,
-        details:result,
-        error:result.error,
+        txId: tx.txId,
+        error: result.error,
         status: "Invalid Signature",
+        signatures: {
+            ecdsa: result.isEcdsaValid,
+            dilithium: result.isDilithiumValid
+        }
     });
 }
 

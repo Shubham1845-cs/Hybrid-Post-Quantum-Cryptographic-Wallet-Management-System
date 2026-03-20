@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTransaction, verifyTransaction ,getTransactionHistory} from "src/controllers/transactionController";
+import { createTransaction, verifyTransaction ,getTransactionHistory} from "../controllers/transactionController";
 
 const router=Router();
 router.post('/create',createTransaction);

@@ -44,12 +44,17 @@ export class SignatureValidator {
 
             // 8.7 — tamper detection: re-derive txId from the raw transaction fields
             // If any field was changed after signing the recomputedTxId will not match
+            // Note: Convert timestamp back to number format for consistent hashing
+            const timestampValue = signedTx.timestamp instanceof Date
+                ? signedTx.timestamp.getTime()
+                : signedTx.timestamp;
+
             const baseTx = {
                 sender:    signedTx.sender,
                 recipient: signedTx.recipient,
                 amount:    signedTx.amount,
                 nonce:     signedTx.nonce,
-                timestamp: signedTx.timestamp
+                timestamp: timestampValue
             }
             const serialized     = this.processor.serializeTransaction(baseTx)
             const recomputedTxId = crypto.createHash('sha256').update(serialized).digest('hex')

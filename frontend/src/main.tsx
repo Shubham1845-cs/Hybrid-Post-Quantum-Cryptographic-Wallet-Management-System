@@ -1,9 +1,10 @@
 import React          from 'react';
 import ReactDOM       from 'react-dom/client';
-import App            from './App';
+import App3D          from './App3D';
 import { AppProvider} from './context/AppContext';
 import ErrorBoundary  from './components/common/ErrorBoundary';
 import './index.css';
+import './styles/3d-app.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -13,7 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
       {/* AppProvider — gives context to entire app */}
       <AppProvider>
-        <App />
+        <App3D />
       </AppProvider>
 
     </ErrorBoundary>
